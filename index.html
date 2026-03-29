@@ -13,10 +13,15 @@
     <iframe id="main-frame" src="https://script.google.com/macros/s/AKfycby6SVN_KMQBlKZXkp2F7NqyJPXyQqy2GO-V3qEkvcG2i2K8cylHR1E_nCd44qaMh6ms/exec"></iframe>
     
     <script>
-        // 🚀 ગ્રાહકની લિંકમાંથી પેરામીટર (?studio=XYZ&mode=cloud) પકડીને Iframe ને આપવાનું સ્માર્ટ એન્જિન
-        const urlParams = window.location.search;
-        const iframe = document.getElementById('main-frame');
-        iframe.src = iframe.src + urlParams;
+        // 🚀 સુરક્ષિત આઈફ્રેમ કનેક્શન એન્જિન
+        window.onload = function() {
+            const urlParams = window.location.search;
+            const iframe = document.getElementById('main-frame');
+            // જો પેરામીટર્સ ના હોય તો સીધી લિંક, હોય તો જોડી દો
+            if (urlParams) {
+                iframe.src = "https://script.google.com/macros/s/AKfycby6SVN_KMQBlKZXkp2F7NqyJPXyQqy2GO-V3qEkvcG2i2K8cylHR1E_nCd44qaMh6ms/exec" + urlParams;
+            }
+        };
     </script>
 </body>
 </html>
