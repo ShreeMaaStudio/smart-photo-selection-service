@@ -84,7 +84,7 @@
                     document.getElementById('title').style.color = "#ff5252";
                     document.getElementById('desc').innerText = "અત્યારે સ્ટુડિયોનું કમ્પ્યુટર બંધ છે અથવા ઇન્ટરનેટ કનેક્શન નથી. કૃપા કરી થોડીવાર પછી પ્રયાસ કરો.";
                 }
-            })
+           })
             .catch(err => {
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('title').innerText = "સર્વર એરર ❌";
@@ -92,6 +92,43 @@
                 document.getElementById('desc').innerText = "ઇન્ટરનેટ અથવા સર્વર કનેક્શનમાં ખામી છે. ફરી પ્રયાસ કરો.";
             });
         }
+    </script>
+
+    <div id="security-overlay"><span style="font-size: 50px;">⚠️</span><br>ચેતવણી!<br><span style="color:#fff; font-size:16px; margin-top:10px;">સ્ક્રીનશોટ કે સ્ક્રીન રેકોર્ડિંગ કરવું સખત મનાઈ છે.<br><br><span style="color:#FF8C00; font-size:12px;">કૃપયા ૬ સેકન્ડ રાહ જુઓ...</span></span></div>
+    <style>
+        .blur-active { filter: blur(50px) brightness(0) !important; pointer-events: none; }
+        #security-overlay { display: none; position: fixed; inset: 0; background: #000; color: #ff5252; z-index: 99999; text-align: center; padding: 30vh 20px 0; font-size: 20px; font-weight: bold; flex-direction: column; line-height: 1.5; }
+    </style>
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault()); 
+        document.addEventListener('dragstart', event => event.preventDefault());
+        
+        function showWarningScreen() {
+            const overlay = document.getElementById('security-overlay'); 
+            if (overlay) overlay.style.display = 'flex';
+            document.querySelector('.box').classList.add('blur-active'); 
+        }
+        function hideWarningScreen() {
+            const overlay = document.getElementById('security-overlay'); 
+            if (overlay) overlay.style.display = 'none';
+            document.querySelector('.box').classList.remove('blur-active');
+        }
+        function penalizeUser() { 
+            showWarningScreen(); 
+            setTimeout(hideWarningScreen, 6000); 
+        }
+        
+        window.addEventListener('keyup', (e) => { if (e.key === 'PrintScreen' || e.code === 'PrintScreen') penalizeUser(); });
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'PrintScreen' || (e.ctrlKey && e.key.toLowerCase() === 'p') || (e.metaKey && e.shiftKey && (e.key.toLowerCase() === 's' || e.key === '3' || e.key === '4')) || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i')) {
+                penalizeUser();
+            }
+        });
+        window.addEventListener('blur', () => { penalizeUser(); });
+        document.addEventListener('visibilitychange', () => { if (document.hidden) penalizeUser(); });
+        window.addEventListener('touchstart', (e) => { if (e.touches.length >= 3) penalizeUser(); });
+        document.addEventListener('copy', (e) => { e.preventDefault(); penalizeUser(); });
+        document.addEventListener('cut', (e) => { e.preventDefault(); penalizeUser(); });
     </script>
 </body>
 </html>
