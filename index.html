@@ -1060,7 +1060,231 @@
             margin-right: auto;
         }
 
+        /* ================= તત્વ પાર્ટનર પ્રોગ્રામ (Partner Program) ================= */
+        .header-partner-btn {
+            background: linear-gradient(45deg, var(--primary-orange), #ffab40);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+        }
+
+        .header-partner-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6);
+        }
+
+        .partner-section {
+            padding: 80px 20px;
+            background: radial-gradient(circle at top, #1a1a1a 0%, var(--bg-color) 100%);
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+
+        .partner-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .partner-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            padding: 30px 20px;
+            border-radius: 16px;
+            transition: 0.3s;
+        }
+
+        .partner-card:hover {
+            border-color: var(--primary-orange);
+            background: rgba(255, 140, 0, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .partner-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .partner-card h3 {
+            color: var(--primary-orange);
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .partner-card p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
         /* ================= પ્રીમિયમ સુરક્ષા અને પ્રાઈવસી (Premium Security Section) ================= */
+        
+        /* ================= ડાઉનલોડ સેક્શન (Download Section) ================= */
+        .download-section {
+            padding: 60px 20px;
+            background-color: #050505;
+            text-align: center;
+            border-top: 1px dashed #333;
+        }
+
+        .download-main-btn {
+            background: linear-gradient(45deg, var(--primary-green), #00e676);
+            color: #000;
+            border: none;
+            padding: 20px 50px;
+            font-size: 24px;
+            font-weight: 900;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 200, 83, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: downloadPulse 2s infinite alternate;
+        }
+
+        .download-main-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 200, 83, 0.6);
+        }
+
+        @keyframes downloadPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
+
+        /* ================= ડાઉનલોડ મોડલ (Download Modal) ================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .download-modal {
+            background: linear-gradient(145deg, #111, #1a1a1a);
+            border: 1px solid var(--primary-green);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 15px 50px rgba(0, 200, 83, 0.2);
+            transform: translateY(-20px);
+            transition: 0.3s ease;
+        }
+
+        .modal-overlay.active .download-modal {
+            transform: translateY(0);
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #aaa;
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.3s;
+            line-height: 1;
+        }
+
+        .close-modal-btn:hover {
+            color: #ff5252;
+            transform: scale(1.1);
+        }
+
+        .modal-title {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .modal-desc {
+            color: #bbb;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .password-input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 10px rgba(0, 200, 83, 0.3);
+        }
+
+        .submit-pass-btn {
+            background: var(--primary-green);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-pass-btn:hover {
+            background: #00e676;
+            box-shadow: 0 5px 15px rgba(0, 200, 83, 0.4);
+        }
+
+        .modal-msg {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+        
+        .msg-error { color: #ff5252; }
+        .msg-success { color: var(--primary-green); }
     </style>
 </head>
 <body>
@@ -1074,6 +1298,12 @@
                 <button class="lang-btn" id="btn-hi" onclick="changeLanguage('hi')">हिन्दी</button>
             </div>
             
+            <button class="header-partner-btn dual-lang" onclick="window.location.href='https://wa.me/919898122349?text=નમસ્તે! મારે તત્વ પાર્ટનર (TPP) બનવું છે. મેં નિયમો વાંચી લીધા છે અને હું સમજુ છું કે મને રિકરિંગ કમિશન ત્યારે જ મળશે જ્યાં સુધી હું એક્ટિવ રહીશ. મારે ઇન્સ્ટોલેશન અને રિચાર્જના ટાર્ગેટ પૂરા કરવાના રહેશે, ગ્રાહકોને સપોર્ટ આપવાનો રહેશે, અને તત્વ વર્લ્ડ . કોમ ની વેબ ને લગતા ટાસ્ક પૂરા કરવાના રહેશે. હું આ શરતો સાથે જોડાવા માંગુ છું.'" 
+                data-gu="પાર્ટનર બનો 🤝" 
+                data-hi="पार्टनर बनें 🤝">
+                પાર્ટનર બનો 🤝
+            </button>
+
             <button class="contact-btn dual-lang" 
                 data-gu="એડમિનનો સંપર્ક કરો" 
                 data-hi="एडमिन से संपर्क करें">
@@ -1591,6 +1821,56 @@
         </div>
     </section>
 
+    <section class="partner-section">
+        <div class="partner-container">
+            <h2 class="section-title dual-lang" 
+                data-gu="તત્વ પાર્ટનર પ્રોગ્રામ (TPP) 🤝" 
+                data-hi="तत्व पार्टनर प्रोग्राम (TPP) 🤝">
+                તત્વ પાર્ટનર પ્રોગ્રામ (TPP) 🤝
+            </h2>
+            <p style="color: #ddd; font-size: 18px; margin-bottom: 20px;" class="dual-lang" 
+                data-gu="ઝીરો ઇન્વેસ્ટમેન્ટ, અનલિમિટેડ કમાણી! આજે જ અમારી સાથે જોડાઈને મહિનાના ₹૨૦,૦૦૦ થી વધુ કમાઓ." 
+                data-hi="ज़ीरो इन्वेस्टमेंट, अनलिमिटेड कमाई! आज ही हमारे साथ जुड़कर महीने के ₹20,000 से अधिक कमाएं।">
+                ઝીરો ઇન્વેસ્ટમેન્ટ, અનલિમિટેડ કમાણી! આજે જ અમારી સાથે જોડાઈને મહિનાના ₹૨૦,૦૦૦ થી વધુ કમાઓ.
+            </p>
+
+            <div class="partner-grid">
+                <div class="partner-card">
+                    <div class="partner-icon">🚀</div>
+                    <h3 class="dual-lang" data-gu="૩૦% ફિક્સ કમિશન" data-hi="30% फिक्स कमीशन">૩૦% ફિક્સ કમિશન</h3>
+                    <p class="dual-lang" 
+                        data-gu="જ્યારે પણ તમે કોઈ સ્ટુડિયોમાં ઇન્સ્ટોલેશન કરશો, ત્યારે ઇન્સ્ટોલેશન ચાર્જમાંથી સીધું 3૦% કમિશન તમને મળશે." 
+                        data-hi="जब भी आप किसी स्टूडियो में इंस्टॉलेशन करेंगे, तब इंस्टॉलेशन चार्ज में से सीधा ૩0% कमीशन आपको मिलेगा।">
+                        જ્યારે પણ તમે કોઈ સ્ટુડિયોમાં ઇન્સ્ટોલેશન કરશો, ત્યારે ઇન્સ્ટોલેશન ચાર્જમાંથી સીધું 3૦% કમિશન તમને મળશે.
+                    </p>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-icon">💰</div>
+                    <h3 class="dual-lang" data-gu="એક્ટિવ રિકરિંગ ઇન્કમ" data-hi="एक्टिव रिकरिंग इनकम">એક્ટિવ રિકરિંગ ઇન્કમ</h3>
+                    <p class="dual-lang" 
+                        data-gu="તમે જોડેલા સ્ટુડિયો રિચાર્જ કરશે ત્યારે કમિશન મળશે, પણ શરત એ છે કે તમારે એક્ટિવ રહીને ટાર્ગેટ પૂરા કરવા પડશે (જેમ કે ઇન્સ્ટોલેશન, સપોર્ટ અને વેબસાઇટ ટાસ્ક)." 
+                        data-hi="आपके द्वारा जोड़े गए स्टूडियो रिचार्ज करेंगे तब कमीशन मिलेगा, लेकिन शर्त यह है कि आपको एक्टिव रहकर टारगेट पूरे करने होंगे (जैसे इंस्टॉलेशन, सपोर्ट और वेबसाइट टास्क)।">
+                        તમે જોડેલા સ્ટુડિયો રિચાર્જ કરશે ત્યારે કમિશન મળશે, પણ શરત એ છે કે તમારે એક્ટિવ રહીને ટાર્ગેટ પૂરા કરવા પડશે (જેમ કે ઇન્સ્ટોલેશન, સપોર્ટ અને વેબસાઇટ ટાસ્ક).
+                    </p>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-icon">💼</div>
+                    <h3 class="dual-lang" data-gu="કોઈ ફિક્સ ટાઈમિંગ નહિ" data-hi="कोई फिक्स टाइमिंग नहीं">કોઈ ફિક્સ ટાઈમિંગ નહિ</h3>
+                    <p class="dual-lang" 
+                        data-gu="કોઈ બોસ નહિ, કોઈ ટાઈમ લિમિટ નહિ! તમે તમારા અનુકૂળ સમયે અને વિસ્તારમાં કામ કરી શકો છો." 
+                        data-hi="कोई बॉस नहीं, कोई टाइम लिमिट नहीं! आप अपने अनुकूल समय और क्षेत्र में काम कर सकते हैं।">
+                        કોઈ બોસ નહિ, કોઈ ટાઈમ લિમિટ નહિ! તમે તમારા અનુકૂળ સમયે અને વિસ્તારમાં કામ કરી શકો છો.
+                    </p>
+                </div>
+            </div>
+
+            <a href="https://wa.me/919898122349?text=નમસ્તે! મારે તત્વ પાર્ટનર (TPP) બનવું છે. મેં નિયમો વાંચી લીધા છે અને હું સમજુ છું કે મને રિકરિંગ કમિશન ત્યારે જ મળશે જ્યાં સુધી હું એક્ટિવ રહીશ. મારે ઇન્સ્ટોલેશન અને રિચાર્જના ટાર્ગેટ પૂરા કરવાના રહેશે, ગ્રાહકોને સપોર્ટ આપવાનો રહેશે, અને તત્વ વર્લ્ડ . કોમ ની વેબ ને લગતા ટાસ્ક પૂરા કરવાના રહેશે. હું આ શરતો સાથે જોડાવા માંગુ છું." target="_blank" class="cta-call-btn" style="margin: 0 auto; width: fit-content; background: #FF8C00; color: #000;">
+                <span style="font-size:24px; margin-right:10px;">📝</span>
+                <span class="dual-lang" data-gu="આજે જ રજીસ્ટર કરો" data-hi="आज ही रजिस्टर करें">આજે જ રજીસ્ટર કરો</span>
+            </a>
+        </div>
+    </section>
+
     <section class="feedback-section">
         <div class="feedback-box">
             <div style="font-size: 50px; margin-bottom: 20px;">💡</div>
@@ -1634,6 +1914,14 @@
         </div>
     </section>
 
+    <section class="download-section">
+        <button class="download-main-btn dual-lang" id="openDownloadModalBtn"
+            data-gu="સોફ્ટવેર ડાઉનલોડ કરો ⬇️" 
+            data-hi="सॉफ्टवेयर डाउनलोड करें ⬇️">
+            સોફ્ટવેર ડાઉનલોડ કરો ⬇️
+        </button>
+    </section>
+
     <a href="https://wa.me/919898122349?text=નમસ્તે શ્રી માં સ્ટુડિયો! મારે 'Tatva' સોફ્ટવેરનું લાઇવ ડેમો અને ઇન્સ્ટોલેશન બુક કરવું છે." target="_blank" class="wa-floating-btn" title="Chat on WhatsApp">
         <span style="display: flex; align-items: center; justify-content: center; transform: translateY(-2px);">
             <svg width="35" height="35" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
@@ -1641,6 +1929,20 @@
             </svg>
         </span>
     </a>
+
+    <div class="modal-overlay" id="downloadModalOverlay">
+        <div class="download-modal">
+            <button class="close-modal-btn" id="closeModalBtn">&times;</button>
+            <h3 class="modal-title dual-lang" data-gu="સુરક્ષિત ડાઉનલોડ 🔒" data-hi="सुरक्षित डाउनलोड 🔒">સુરક્ષિત ડાઉનલોડ 🔒</h3>
+            <p class="modal-desc dual-lang" data-gu="સોફ્ટવેર ડાઉનલોડ કરવા માટે તમારો પાસવર્ડ દાખલ કરો." data-hi="सॉफ्टवेयर डाउनलोड करने के लिए अपना पासवर्ड दर्ज करें।">સોફ્ટવેર ડાઉનલોડ કરવા માટે તમારો પાસવર્ડ દાખલ કરો.</p>
+            
+            <input type="password" id="softwarePassword" class="password-input" placeholder="Enter Password" autocomplete="off">
+            
+            <button class="submit-pass-btn dual-lang" id="verifyPassBtn" data-gu="ચકાસો અને ડાઉનલોડ કરો" data-hi="सत्यापित करें और डाउनलोड करें">ચકાસો અને ડાઉનલોડ કરો</button>
+            
+            <div id="modalMessage" class="modal-msg"></div>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="footer-content">
@@ -1677,6 +1979,94 @@
                     el.innerHTML = el.getAttribute('data-hi');
                     document.body.style.fontFamily = "'Mukta', sans-serif";
                 }
+            });
+        }
+
+        // ================= મોડલ ઓપન / ક્લોઝ લોજીક (Modal Open/Close) =================
+        const modalOverlay = document.getElementById('downloadModalOverlay');
+        const openModalBtn = document.getElementById('openDownloadModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const passInput = document.getElementById('softwarePassword');
+        const msgBox = document.getElementById('modalMessage');
+
+        // ડાઉનલોડ બટન પર ક્લિક કરવાથી મોડલ ખુલશે
+        if(openModalBtn) {
+            openModalBtn.addEventListener('click', function() {
+                modalOverlay.classList.add('active');
+                passInput.value = ''; // જૂનો પાસવર્ડ સાફ કરો
+                msgBox.innerHTML = ''; // જૂનો મેસેજ સાફ કરો
+                msgBox.className = 'modal-msg'; 
+                setTimeout(() => passInput.focus(), 100); // પાસવર્ડ નાખવાના ખાનામાં સીધું કર્સર આવી જશે
+            });
+        }
+
+        // ચોકડી (X) પર ક્લિક કરવાથી મોડલ બંધ થશે
+        if(closeModalBtn) {
+            closeModalBtn.addEventListener('click', function() {
+                modalOverlay.classList.remove('active');
+            });
+        }
+
+        // મોડલની બહાર (કાળા ભાગ પર) ક્લિક કરવાથી પણ મોડલ બંધ થશે
+        if(modalOverlay) {
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('active');
+                }
+            });
+        }
+
+        // ================= પાસવર્ડ ચેક અને ડાઉનલોડ લોજીક (Google Sheet Connection) =================
+        const verifyBtn = document.getElementById('verifyPassBtn');
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxIV_j3-nPxnWQbfqbZ3lT-l3U_vecJEvm1HNNqA-xVXNm5Qi88hBkzHhd83RlltEM3/exec";
+
+        if(verifyBtn) {
+            verifyBtn.addEventListener('click', function() {
+                const passValue = passInput.value.trim();
+                const isHindi = document.getElementById('btn-hi').classList.contains('active');
+                
+                if(passValue === "") {
+                    msgBox.className = 'modal-msg msg-error';
+                    msgBox.innerText = isHindi ? "कृपया पासवर्ड दर्ज करें!" : "કૃપા કરીને પાસવર્ડ દાખલ કરો!";
+                    return;
+                }
+
+                // લોડિંગ બતાવો
+                verifyBtn.innerText = isHindi ? "जांच हो रही है..." : "ચકાસી રહ્યા છીએ...";
+                verifyBtn.disabled = true;
+                msgBox.innerHTML = "";
+
+                // Google Apps Script ને રિકવેસ્ટ મોકલો
+                fetch(scriptURL + "?pass=" + encodeURIComponent(passValue))
+                    .then(response => response.json())
+                    .then(data => {
+                        verifyBtn.innerText = isHindi ? "सत्यापित करें और डाउनलोड करें" : "ચકાસો અને ડાઉનલોડ કરો";
+                        verifyBtn.disabled = false;
+
+                        if(data.status === "success") {
+                            msgBox.className = 'modal-msg msg-success';
+                            msgBox.innerText = isHindi ? "पासवर्ड सही है! डाउनलोड शुरू हो रहा है..." : "પાસવર્ડ સાચો છે! ડાઉનલોડ શરૂ થઈ રહ્યું છે...";
+                            
+                            // 1.5 સેકન્ડ પછી નવી ટેબમાં ડાઉનલોડ લિંક ખોલો
+                            setTimeout(() => {
+                                window.open(data.link, '_blank');
+                                modalOverlay.classList.remove('active'); // મોડલ બંધ કરો
+                                passInput.value = ''; // પાસવર્ડ ક્લિયર કરો
+                            }, 1500);
+                        } else {
+                            msgBox.className = 'modal-msg msg-error';
+                            msgBox.innerHTML = isHindi ? 
+                                "गलत पासवर्ड!<br>सही पासवर्ड के लिए संपर्क करें:<br>📞 98981 22349 / 97233 61684" : 
+                                "પાસવર્ડ ખોટો છે!<br>સાચા પાસવર્ડ માટે સંપર્ક કરો:<br>📞 98981 22349 / 97233 61684";
+                        }
+                    })
+                    .catch(error => {
+                        verifyBtn.innerText = isHindi ? "सत्यापित करें और डाउनलोड करें" : "ચકાસો અને ડાઉનલોડ કરો";
+                        verifyBtn.disabled = false;
+                        msgBox.className = 'modal-msg msg-error';
+                        msgBox.innerText = isHindi ? "कुछ गलत हो गया! इंटरनेट कनेक्शन जांचें।" : "કંઈક ભૂલ થઈ! ઇન્ટરનેટ કનેક્શન ચેક કરો.";
+                        console.error("Error!", error.message);
+                    });
             });
         }
     </script>
