@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATVA - Smart Photo Selection & File Share</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;700;900&family=Mukta:wght@400;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ================= બેઝિક સેટઅપ (તમારા સોફ્ટવેર મુજબ ડાર્ક થીમ) ================= */
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #ffffff;
+            --primary-orange: #FF8C00;
+            --primary-green: #00c853;
+            --dark-card: #121212;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans Gujarati', 'Mukta', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ================= હેડર (Header) ================= */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+
+        .brand-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* ભાષા બદલવાનું બટન (Language Toggle) */
+        .lang-switch {
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 30px;
+            display: flex;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .lang-btn {
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #aaa;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-orange);
+            color: #000;
+        }
+
+        /* Contact Admin બટન */
+        .contact-btn {
+            background: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-green);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 200, 83, 0.4);
+        }
+
+        /* ================= હીરો સેક્શન (Hero Section) ================= */
+        .hero {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* બેકગ્રાઉન્ડની ચમક (ગ્લો ઈફેક્ટ) */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(255,140,0,0.1) 0%, rgba(10,10,10,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        /* મુખ્ય ટેગલાઈન */
+        .hero-title {
+            font-size: 56px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            max-width: 900px;
+            background: -webkit-linear-gradient(45deg, #ffffff, #FF8C00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 10px rgba(255,140,0,0.1); }
+            to { text-shadow: 0 0 20px rgba(255,140,0,0.3); }
+        }
+
+        /* સબ-ટેગલાઈન */
+        .hero-subtitle {
+            font-size: 22px;
+            color: #aaa;
+            max-width: 700px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        /* એક્શન બટન */
+        .cta-btn {
+            background: var(--primary-orange);
+            color: #000;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 140, 0, 0.4);
+        }
+
+        /* મોબાઈલ વ્યુ માટે */
+        @media (max-width: 768px) {
+            .header { padding: 15px 20px; flex-direction: column; gap: 15px; }
+            .hero-title { font-size: 36px; }
+            .hero-subtitle { font-size: 16px; }
+        }
+    /* ================= સમસ્યા અને સમાધાન (Problem vs Solution) ================= */
+        .problem-solution {
+            padding: 80px 20px;
+            background-color: #0f0f0f;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 3px;
+            background: var(--primary-orange);
+            bottom: -10px;
+            left: 20%;
+            border-radius: 5px;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .info-card {
+            background: var(--dark-card);
+            border: 1px solid #222;
+            border-radius: 15px;
+            padding: 30px 20px;
+            width: 320px;
+            text-align: left;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            border-color: #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* કાર્ડની ઉપરની બોર્ડર લાઈન */
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-green));
+        }
+
+        .problem-box {
+            background: rgba(255, 82, 82, 0.1);
+            border-left: 3px solid #ff5252;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .problem-text {
+            color: #ff5252;
+            font-size: 15px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .solution-box {
+            background: rgba(0, 200, 83, 0.1);
+            border-left: 3px solid var(--primary-green);
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+
+        .solution-text {
+            color: #00e676;
+            font-size: 15px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        /* ================= મુખ્ય ફીચર્સ (Key Features) ================= */
+        .features-section {
+            padding: 80px 20px;
+            background-color: var(--bg-color);
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, #111, #1a1a1a);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 40px 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 15px;
+            /* હવે આ બેકગ્રાઉન્ડને બદલે માત્ર પાતળી બોર્ડર જેવું દેખાશે */
+            padding: 2px; 
+            background: linear-gradient(45deg, var(--primary-orange), var(--primary-green));
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 5;
+            transition: opacity 0.4s ease;
+            opacity: 0;
+        }
+
+        .feature-card:hover::before { opacity: 1; }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: #111; /* કાર્ડનું અસલી બેકગ્રાઉન્ડ જળવાઈ રહેશે */
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .feature-title {
+            font-size: 22px;
+            color: var(--primary-orange);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .feature-desc {
+            color: #ccc;
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ઉદાહરણ (Example) માટેની નવી સ્ટાઈલ */
+        .feature-example {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #444;
+            font-size: 13px;
+            color: var(--primary-green);
+            font-style: italic;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        /* ================= પ્રીમિયમ સુરક્ષા અને પ્રાઈવસી (Premium Security Section) ================= */
+        .security-section {
+            padding: 100px 20px;
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+            text-align: center;
+            border-top: 1px solid rgba(255, 140, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism (કાચ જેવી ઈફેક્ટ) Security Box */
+        .security-box {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 200, 83, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 200, 83, 0.3);
+            border-radius: 24px;
+            padding: 60px 40px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,200,83,0.05);
+            z-index: 2;
+        }
+
+        /* Floating & Glowing Shield (હવામાં તરતી 3D શિલ્ડ) */
+        .shield-icon {
+            font-size: 70px;
+            margin-bottom: 25px;
+            display: inline-block;
+            animation: floatShield 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(0, 200, 83, 0.6));
+        }
+
+        @keyframes floatShield {
+            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 15px rgba(0, 200, 83, 0.6)); }
+            50% { transform: translateY(-15px) scale(1.05); filter: drop-shadow(0 0 30px rgba(0, 200, 83, 0.9)); }
+            100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 15px rgba(0, 200, 83, 0.6)); }
+        }
+
+        .security-title {
+            font-size: 36px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,200,83,0.4);
+            margin-bottom: 25px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .security-desc {
+            font-size: 18px;
+            color: #ddd;
+            line-height: 1.9;
+            font-weight: 400;
+            text-align: center; /* લખાણને સેન્ટર કરવા માટે */
+            max-width: 800px;  /* વાંચવામાં સરળ રહે તે માટે પહોળાઈ લિમિટ કરી */
+            margin: 0 auto;    /* સેન્ટરમાં રાખવા માટે */
+        }
+
+        /* ================= પ્રીમિયમ ફૂટર (Premium Footer) ================= */
+        .footer {
+            background: #000;
+            padding: 50px 20px 30px;
+            text-align: center;
+            border-top: 2px solid var(--primary-orange);
+            position: relative;
+            box-shadow: 0 -10px 30px rgba(255,140,0,0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* હોલો (Hollow) ગ્લોઈંગ લોગો */
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--primary-orange);
+            background: linear-gradient(45deg, var(--primary-orange), #ffeb3b);
+            -webkit-background-clip: text;
+            letter-spacing: 4px;
+            animation: logoGlow 3s infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { text-shadow: 0 0 5px rgba(255,140,0,0.1); }
+            to { text-shadow: 0 0 20px rgba(255,140,0,0.5); }
+        }
+
+        .footer-text {
+            color: #888;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .footer-contact {
+            background: rgba(255, 140, 0, 0.1);
+            color: var(--primary-orange);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 10px;
+            letter-spacing: 1.5px;
+            border: 1px solid rgba(255,140,0,0.3);
+            transition: 0.3s;
+        }
+        
+        .footer-contact:hover {
+            background: var(--primary-orange);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255,140,0,0.4);
+        }
+
+        /* ================= કેવી રીતે કામ કરે છે (How it Works) ================= */
+        .how-it-works {
+            padding: 80px 20px;
+            background-color: #0a0a0a;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 40px auto 0;
+        }
+
+        .step-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 30px 20px;
+            width: 220px;
+            text-align: center;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .step-box:hover {
+            border-color: var(--primary-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255,140,0,0.15);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-orange);
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            border: 3px solid #0a0a0a;
+        }
+
+        .step-icon {
+            font-size: 40px;
+            margin: 15px 0;
+            color: #fff;
+        }
+
+        .step-title {
+            color: var(--primary-green);
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .step-desc {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Desktop માં વચ્ચે તીર બતાવવા */
+        .step-arrow {
+            font-size: 30px;
+            color: #444;
+            align-self: center;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 900px) {
+            .step-arrow { display: none; }
+        }
+
+        /* ================= સ્માર્ટ ફાઇલ શેર (Smart File Share Deep Dive) ================= */
+        .file-share-section {
+            padding: 80px 20px;
+            background-color: var(--bg-color);
+            border-top: 1px solid #222;
+            text-align: center; /* આ આખા સેક્શનને સેન્ટર કરવા માટે */
+        }
+
+        .fs-container {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .fs-container { grid-template-columns: 1fr; }
+        }
+
+        .fs-benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .fs-benefit-item {
+            background: #111;
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-orange);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        
+        .fs-benefit-item:hover {
+            transform: translateX(10px);
+            border-left-color: var(--primary-green);
+        }
+
+        .fs-benefit-title {
+            color: var(--primary-orange);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fs-benefit-desc {
+            color: #bbb;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .fs-compare-box {
+            background: linear-gradient(145deg, #1a1a1a, #111);
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .fs-compare-title {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .fs-compare-item {
+            background: rgba(255, 82, 82, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #ff5252;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 82, 82, 0.2);
+        }
+
+        .fs-compare-item.winner {
+            background: rgba(0, 200, 83, 0.1);
+            color: var(--primary-green);
+            border: 1px solid var(--primary-green);
+            font-size: 16px;
+            padding: 20px 15px;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 0 15px rgba(0,200,83,0.2);
+        }
+
+        /* ================= Refer & Earn + System Requirements ================= */
+        .refer-req-section {
+            padding: 80px 20px;
+            background-color: #0a0a0a;
+            border-top: 1px solid #222;
+        }
+
+        .rr-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .rr-card {
+            background: linear-gradient(145deg, #111, #161616);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+
+        .rr-card:hover {
+            border-color: var(--primary-orange);
+            transform: translateY(-5px);
+        }
+
+        .rr-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-green));
+        }
+
+        .rr-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .rr-title {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .rr-desc {
+            color: #aaa;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .req-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .req-list li {
+            background: rgba(255,255,255,0.03);
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: #ddd;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #222;
+        }
+
+        .req-list li strong {
+            color: var(--primary-green);
+            min-width: 80px;
+            display: inline-block;
+        }
+
+        .refer-box {
+            background: rgba(255, 140, 0, 0.1);
+            border: 1px dashed var(--primary-orange);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .refer-highlight {
+            color: var(--primary-orange);
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* ================= વારંવાર પૂછાતા સવાલો (FAQ) ================= */
+        .faq-section {
+            padding: 80px 20px;
+            background-color: #0f0f0f;
+            border-top: 1px solid #222;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .faq-item {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary-orange);
+        }
+
+        .faq-item summary {
+            padding: 20px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-item summary::after {
+            content: '▼';
+            color: var(--primary-green);
+            font-size: 14px;
+            transition: transform 0.3s;
+        }
+
+        .faq-item[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .faq-content {
+            padding: 0 25px 25px;
+            color: #aaa;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* ================= અમારા વિશે (About Us) ================= */
+        .about-section {
+            padding: 80px 20px;
+            background: linear-gradient(180deg, #050505, #111);
+            border-top: 1px solid #222;
+            text-align: left;
+        }
+
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .about-container { padding: 30px 20px; }
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .about-header h2 {
+            font-size: 36px;
+            color: var(--primary-orange);
+            margin-bottom: 10px;
+        }
+
+        .about-header p {
+            color: var(--primary-green);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .about-card {
+            background: #0a0a0a;
+            border-left: 4px solid var(--primary-orange);
+            padding: 30px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .about-card:hover {
+            transform: translateX(10px);
+            border-left-color: var(--primary-green);
+        }
+
+        .about-card h3 {
+            color: #fff;
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .about-card p {
+            color: #bbb;
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .contact-card {
+            background: rgba(0, 200, 83, 0.05);
+            border: 1px dashed var(--primary-green);
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .contact-card p {
+            color: #ddd;
+            font-size: 16px;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .contact-card strong {
+            color: var(--primary-green);
+        }
+
+        /* ================= ફાઈનલ CTA બેનર (Final Call to Action) ================= */
+        .cta-bottom-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #FF8C00 0%, #cc7000 100%);
+            text-align: center;
+            color: #000;
+        }
+
+        .cta-bottom-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cta-bottom-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .cta-bottom-desc {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #222;
+        }
+
+        .cta-bottom-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-call-btn, .cta-wa-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-call-btn {
+            background: #000;
+            color: #FF8C00;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .cta-call-btn:hover {
+            background: #222;
+            transform: translateY(-5px);
+        }
+
+        .cta-wa-btn {
+            background: #25D366;
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(37,211,102,0.4);
+        }
+
+        .cta-wa-btn:hover {
+            background: #1ebd5c;
+            transform: translateY(-5px);
+        }
+
+        /* ================= WhatsApp Floating Button ================= */
+        .wa-floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25D366;
+            color: #fff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(37,211,102,0.5);
+            z-index: 9999;
+            animation: waPulse 2s infinite;
+            transition: 0.3s;
+        }
+
+        .wa-floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes waPulse {
+            0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37,211,102,0); }
+            100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+        }
+
+        /* ================= ફીડબેક અને આઈડિયા સેક્શન (Feedback Section) ================= */
+        .feedback-section {
+            padding: 80px 20px;
+            background-color: #0a0a0a;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+
+        .feedback-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 140, 0, 0.03);
+            border: 1px dashed rgba(255, 140, 0, 0.4);
+            padding: 50px 30px;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+
+        .feedback-box:hover {
+            border-color: var(--primary-orange);
+            background: rgba(255, 140, 0, 0.06);
+        }
+
+        .feedback-title {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .feedback-desc {
+            color: #aaa;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ================= પ્રીમિયમ સુરક્ષા અને પ્રાઈવસી (Premium Security Section) ================= */
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="#" class="brand-logo">TATVA</a>
+        
+        <div class="header-controls">
+            <div class="lang-switch">
+                <button class="lang-btn active" id="btn-gu" onclick="changeLanguage('gu')">ગુજરાતી</button>
+                <button class="lang-btn" id="btn-hi" onclick="changeLanguage('hi')">हिन्दी</button>
+            </div>
+            
+            <button class="contact-btn dual-lang" 
+                data-gu="એડમિનનો સંપર્ક કરો" 
+                data-hi="एडमिन से संपर्क करें">
+                એડમિનનો સંપર્ક કરો
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1 class="hero-title dual-lang" 
+            data-gu="ફોટો સિલેક્શન અને ડેટા શેરિંગનું ભવિષ્ય હવે તમારા હાથમાં!" 
+            data-hi="फोटो सिलेक्शन और डेटा शेयरिंग का भविष्य अब आपके हाथों में!">
+            ફોટો સિલેક્શન અને ડેટા શેરિંગનું ભવિષ્ય હવે તમારા હાથમાં!
+        </h1>
+        
+        <p class="hero-subtitle dual-lang" 
+            data-gu="સ્ટુડિયો મિત્રો માટે 100% સુરક્ષિત, ફાસ્ટ અને પ્રાઇવસી સાથેનું અલ્ટીમેટ સોફ્ટવેર. નો પેનડ્રાઈવ, નો ડેટા ચોરી!" 
+            data-hi="स्टूडियो मित्रों के लिए 100% सुरक्षित, फास्ट और प्राइवेसी के साथ अल्टीमेट सॉफ्टवेयर। नो पेनड्राइव, नो डेटा चोरी!">
+            સ્ટુડિયો મિત્રો માટે 100% સુરક્ષિત, ફાસ્ટ અને પ્રાઇવસી સાથેનું અલ્ટીમેટ સોફ્ટવેર. નો પેનડ્રાઈવ, નો ડેટા ચોરી!
+        </p>
+        
+        <button class="cta-btn dual-lang" 
+            data-gu="પાવરફુલ ફીચર્સ જોવા માટે નીચે સ્ક્રોલ કરો ⬇️" 
+            data-hi="पावरफुल फीचर्स देखने के लिए नीचे स्क्रॉल करें ⬇️">
+            પાવરફુલ ફીચર્સ જોવા માટે નીચે સ્ક્રોલ કરો ⬇️
+        </button>
+    </section>
+<section class="problem-solution">
+        <h2 class="section-title dual-lang" 
+            data-gu="જૂની રીતો છોડો, સ્માર્ટ બનો!" 
+            data-hi="पुराने तरीके छोड़ें, स्मार्ट बनें!">
+            જૂની રીતો છોડો, સ્માર્ટ બનો!
+        </h2>
+
+        <div class="cards-container">
+            <div class="info-card">
+                <div class="card-icon">💾 ➡️ 🔗</div>
+                <div class="problem-box">
+                    <p class="problem-text dual-lang" 
+                        data-gu="❌ પેનડ્રાઈવ આપવાની અને પાછી માંગવાની ઝંઝટ." 
+                        data-hi="❌ पेनड्राइव देने और वापस मांगने का झंझट।">
+                        ❌ પેનડ્રાઈવ આપવાની અને પાછી માંગવાની ઝંઝટ.
+                    </p>
+                </div>
+                <div class="solution-box">
+                    <p class="solution-text dual-lang" 
+                        data-gu="✅ ડાયરેક્ટ લિંક શેર કરો. ગ્રાહક ગમે ત્યાંથી પોતાના મોબાઈલ કે ટીવી પર ફોટા સિલેક્ટ કરી શકશે." 
+                        data-hi="✅ डायरेक्ट लिंक शेयर करें। ग्राहक कहीं से भी मोबाइल या टीवी पर फोटो सेलेक्ट कर सकेंगे।">
+                        ✅ ડાયરેક્ટ લિંક શેર કરો. ગ્રાહક ગમે ત્યાંથી પોતાના મોબાઈલ કે ટીવી પર ફોટા સિલેક્ટ કરી શકશે.
+                    </p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="card-icon">🔓 ➡️ 🛡️</div>
+                <div class="problem-box">
+                    <p class="problem-text dual-lang" 
+                        data-gu="❌ પાસવર્ડ વગર ફોટા લીક થવાનો અને સ્ક્રીનશૉટથી ડેટા ચોરીનો ડર." 
+                        data-hi="❌ बिना पासवर्ड फोटो लीक होने और स्क्रीनशॉट से डेटा चोरी का डर।">
+                        ❌ પાસવર્ડ વગર ફોટા લીક થવાનો અને સ્ક્રીનશૉટથી ડેટા ચોરીનો ડર.
+                    </p>
+                </div>
+                <div class="solution-box">
+                    <p class="solution-text dual-lang" 
+                        data-gu="✅ કસ્ટમ પાસવર્ડ પ્રોટેક્શન, 100% એન્ટી-સ્ક્રીનશૉટ સિસ્ટમ અને તમારા સ્ટુડિયોનો સ્માર્ટ વોટરમાર્ક." 
+                        data-hi="✅ कस्टम पासवर्ड प्रोटेक्शन, 100% एंटी-स्क्रीनशॉट सिस्टम और आपके स्टूडियो का स्मार्ट वाटरमार्क।">
+                        ✅ કસ્ટમ પાસવર્ડ પ્રોટેક્શન, 100% એન્ટી-સ્ક્રીનશૉટ સિસ્ટમ અને તમારા સ્ટુડિયોનો સ્માર્ટ વોટરમાર્ક.
+                    </p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="card-icon">⏳ ➡️ ⚡</div>
+                <div class="problem-box">
+                    <p class="problem-text dual-lang" 
+                        data-gu="❌ ગ્રાહકને સિલેક્શનમાં પડતી મુશ્કેલી અને મહિનાઓ સુધી કામ અટકી પડવું." 
+                        data-hi="❌ ग्राहक को सिलेक्शन में होने वाली परेशानी और महीनों तक काम अटकना।">
+                        ❌ ગ્રાહકને સિલેક્શનમાં પડતી મુશ્કેલી અને મહિનાઓ સુધી કામ અટકી પડવું.
+                    </p>
+                </div>
+                <div class="solution-box">
+                    <p class="solution-text dual-lang" 
+                        data-gu="✅ 'લાઈવ મોનિટર' દ્વારા સ્ટુડિયો પર બેઠા બેઠા ગ્રાહકની સ્ક્રીન કંટ્રોલ કરી તેમને સિલેક્શનમાં મદદ કરો." 
+                        data-hi="✅ 'लाइव मॉनिटर' द्वारा स्टूडियो पर बैठे-बैठे ग्राहक की स्क्रीन कंट्रोल कर उन्हें सिलेक्शन में मदद करें।">
+                        ✅ 'લાઈવ મોનિટર' દ્વારા સ્ટુડિયો પર બેઠા બેઠા ગ્રાહકની સ્ક્રીન કંટ્રોલ કરી તેમને સિલેક્શનમાં મદદ કરો.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title dual-lang" 
+            data-gu="તત્વ સોફ્ટવેરના પાવરફુલ ફીચર્સ" 
+            data-hi="तत्व सॉफ्टवेयर के पावरफुल फीचर्स">
+            તત્વ સોફ્ટવેરના પાવરફુલ ફીચર્સ
+        </h2>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3 class="feature-title dual-lang" data-gu="અલ્ટીમેટ ફાઈલ શેરિંગ" data-hi="अल्टीमेट फाइल शेयरिंग">અલ્ટીમેટ ફાઈલ શેરિંગ</h3>
+                <p class="feature-desc dual-lang" 
+                    data-gu="0 સેકન્ડ સર્વર અપલોડ ટાઈમ! તમારી ફાઈલો સીધી તમારા કમ્પ્યુટરથી તમારા એડિટર કે બીજા સ્ટુડિયો મિત્રના કમ્પ્યુટરમાં જશે." 
+                    data-hi="0 सेकंड सर्वर अपलोड टाइम! आपकी फाइलें सीधे आपके कंप्यूटर से आपके एडिटर या दूसरे स्टूडियो मित्र के कंप्यूटर में जाएंगी।">
+                    0 સેકન્ડ સર્વર અપલોડ ટાઈમ! તમારી ફાઈલો સીધી તમારા કમ્પ્યુટરથી તમારા એડિટર કે બીજા સ્ટુડિયો મિત્રના કમ્પ્યુટરમાં જશે.
+                </p>
+                <div class="feature-example dual-lang" 
+                    data-gu="💡 ઉદાહરણ: 100 GB નો વેડિંગ ડેટા થર્ડ-પાર્ટી સર્વર પર અપલોડ કર્યા વગર, હાર્ડ ડ્રાઈવ કે પેનડ્રાઈવની આપ-લે કર્યા વગર સીધો કમ્પ્યુટર થી કમ્પ્યુટર ફૂલ સ્પીડ થી ટ્રાન્સફર કરો અને તમારો કિંમતી સમય અને એકસ્ટ્રા ખર્ચ બચાવો." 
+                    data-hi="💡 उदाहरण: 100 GB का वेडिंग डेटा थर्ड-पार्टी सर्वर पर अपलोड किए बिना, हार्ड ड्राइव या पेनड्राइव के लेन-देन के बिना सीधे कंप्यूटर से कंप्यूटर फुल स्पीड में ट्रांसफर करें और अपना कीमती समय और एक्स्ट्रा खर्च बचाएं।">
+                    💡 ઉદાહરણ: 100 GB નો વેડિંગ ડેટા થર્ડ-પાર્ટી સર્વર પર અપલોડ કર્યા વગર, હાર્ડ ડ્રાઈવ કે પેનડ્રાઈવની આપ-લે કર્યા વગર સીધો કમ્પ્યુટર થી કમ્પ્યુટર ફૂલ સ્પીડ થી ટ્રાન્સફર કરો અને તમારો કિંમતી સમય અને એકસ્ટ્રા ખર્ચ બચાવો.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">👁️</div>
+                <h3 class="feature-title dual-lang" data-gu="લાઈવ મોનિટર અને કંટ્રોલ" data-hi="लाइव मॉनिटर और कंट्रोल">લાઈવ મોનિટર અને કંટ્રોલ</h3>
+                <p class="feature-desc dual-lang" 
+                    data-gu="ગ્રાહક લિંક ખોલે ત્યારે તેઓ કયો ફોટો જોઈ રહ્યા છે તે લાઈવ જુઓ." 
+                    data-hi="ग्राहक जब लिंक खोलें तो वे कौन सा फोटो देख रहे हैं, यह लाइव देखें।">
+                    ગ્રાહક લિંક ખોલે ત્યારે તેઓ કયો ફોટો જોઈ રહ્યા છે તે લાઈવ જુઓ.
+                </p>
+                <div class="feature-example dual-lang" 
+                    data-gu="💡 ઉદાહરણ: જો ગ્રાહકને સિલેક્શન કરતા કે ફોટા આગળ-પાછળ કરતા ના આવડતું હોય, તો તમે સ્ટુડિયો પરથી જ તેમના મોબાઈલની સ્ક્રીન પર ફોટા બદલીને સિલેક્શન કરાવી શકો છો અને ફોન પર જ તેમને ગાઈડ કરી શકો છો." 
+                    data-hi="💡 उदाहरण: यदि ग्राहक को सिलेक्शन करने या फोटो आगे-पीछे करने में परेशानी हो, तो आप स्टूडियो से ही उनके मोबाइल की स्क्रीन पर फोटो बदलकर सिलेक्शन करवा सकते हैं और फोन पर ही उन्हें गाइड कर सकते हैं।">
+                    💡 ઉદાહરણ: જો ગ્રાહકને સિલેક્શન કરતા કે ફોટા આગળ-પાછળ કરતા ના આવડતું હોય, તો તમે સ્ટુડિયો પરથી જ તેમના મોબાઈલની સ્ક્રીન પર ફોટા બદલીને સિલેક્શન કરાવી શકો છો અને ફોન પર જ તેમને ગાઈડ કરી શકો છો.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3 class="feature-title dual-lang" data-gu="એન્ટી-સ્ક્રીનશૉટ સિક્યોરિટી" data-hi="एंटी-स्क्रीनशॉट सिक्योरिटी">એન્ટી-સ્ક્રીનશૉટ સિક્યોરિટી</h3>
+                <p class="feature-desc dual-lang" 
+                    data-gu="ડેટા ચોરી રોકવા માટે 100% સુરક્ષિત સિસ્ટમ." 
+                    data-hi="डेटा चोरी रोकने के लिए 100% सुरक्षित सिस्टम।">
+                    ડેટા ચોરી રોકવા માટે 100% સુરક્ષિત સિસ્ટમ.
+                </p>
+                <div class="feature-example dual-lang" 
+                    data-gu="💡 ઉદાહરણ: જો કોઈ ક્લાયન્ટ ફોટો સેવ કરવા સ્ક્રીનશોટ લેશે, તો સ્ક્રીન કાળી થઈ જશે ને સ્ક્રીનશોર્ટ પણ કાળી સ્ક્રીન નો જ આવશે અને તમને પેનલમાં તરત લાલ એલર્ટ મળશે." 
+                    data-hi="💡 उदाहरण: यदि कोई क्लाइंट फोटो सेव करने के लिए स्क्रीनशॉट लेगा, तो स्क्रीन काली हो जाएगी और स्क्रीनशॉट भी काली स्क्रीन का ही आएगा तथा आपको पैनल में तुरंत रेड अलर्ट मिलेगा।">
+                    💡 ઉદાહરણ: જો કોઈ ક્લાયન્ટ ફોટો સેવ કરવા સ્ક્રીનશોટ લેશે, તો સ્ક્રીન કાળી થઈ જશે ને સ્ક્રીનશોર્ટ પણ કાળી સ્ક્રીન નો જ આવશે અને તમને પેનલમાં તરત લાલ એલર્ટ મળશે.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3 class="feature-title dual-lang" data-gu="સ્માર્ટ કસ્ટમ વોટરમાર્ક" data-hi="स्मार्ट कस्टम वाटरमार्क">સ્માર્ટ કસ્ટમ વોટરમાર્ક</h3>
+                <p class="feature-desc dual-lang" 
+                    data-gu="તમારા સ્ટુડિયોના બ્રાન્ડિંગ સાથેનો સ્માર્ટ વોટરમાર્ક." 
+                    data-hi="आपके स्टूडियो की ब्रांडिंग के साथ स्मार्ट वाटरमार्क।">
+                    તમારા સ્ટુડિયોના બ્રાન્ડિંગ સાથેનો સ્માર્ટ વોટરમાર્ક.
+                </p>
+                <div class="feature-example dual-lang" 
+                    data-gu="💡 ઉદાહરણ: દરેક ફોટા પર તમારા સ્ટુડિયોનો સુંદર વોટરમાર્ક લાગશે, ફોટાની સુંદરતા બગડે નહિ અને કોઈ ગેરઉપયોગ કરી શકે નહિ તે રીતે સ્માર્ટલી લોગો છપાશે, જેથી તમારી ફ્રી એડવર્ટાઇઝિંગ થશે." 
+                    data-hi="💡 उदाहरण: प्रत्येक फोटो पर आपके स्टूडियो का सुंदर वाटरमार्क लगेगा, फोटो की सुंदरता खराब न हो और कोई दुरुपयोग न कर सके इस तरह स्मार्टली लोगो छपेगा, जिससे आपकी फ्री एडवरटाइजिंग होगी।">
+                    💡 ઉદાહરણ: દરેક ફોટા પર તમારા સ્ટુડિયોનો સુંદર વોટરમાર્ક લાગશે, ફોટાની સુંદરતા બગડે નહિ અને કોઈ ગેરઉપયોગ કરી શકે નહિ તે રીતે સ્માર્ટલી લોગો છપાશે, જેથી તમારી ફ્રી એડવર્ટાઇઝિંગ થશે.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3 class="feature-title dual-lang" data-gu="100% ડેટા પ્રાઈવસી" data-hi="100% डेटा प्राइवेसी">100% ડેટા પ્રાઈવસી</h3>
+                <p class="feature-desc dual-lang" 
+                    data-gu="તમારો ડેટા કોઈ થર્ડ-પાર્ટી સર્વર પર સેવ થતો નથી." 
+                    data-hi="आपका डेटा किसी थर्ड-पार्टी सर्वर पर सेव नहीं होता।">
+                    તમારો ડેટા કોઈ થર્ડ-પાર્ટી સર્વર પર સેવ થતો નથી.
+                </p>
+                <div class="feature-example dual-lang" 
+                    data-gu="💡 ઉદાહરણ: ગ્રાહકના અંગત પ્રસંગના ફોટા માત્ર તેમના અને તમારા કમ્પ્યુટર વચ્ચે જ રહેશે, તમારો ડેટા તમારા પોતાના જ PC ની તિજોરીમાં 100% સેફ." 
+                    data-hi="💡 उदाहरण: ग्राहक के निजी प्रसंग के फोटो केवल उनके और आपके कंप्यूटर के बीच ही रहेंगे, आपका डेटा आपके अपने ही PC की तिजोरी में 100% सेफ।">
+                    💡 ઉદાહરણ: ગ્રાહકના અંગત પ્રસંગના ફોટા માત્ર તેમના અને તમારા કમ્પ્યુટર વચ્ચે જ રહેશે, તમારો ડેટા તમારા પોતાના જ PC ની તિજોરીમાં 100% સેફ.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title dual-lang" data-gu="મલ્ટી-ડિવાઈસ સપોર્ટ" data-hi="मल्टी-डिवाइस सपोर्ट">મલ્ટી-ડિવાઈસ સપોર્ટ</h3>
+                <p class="feature-desc dual-lang" 
+                    data-gu="ગ્રાહક પોતાના પાસવર્ડ સાથે લિંક ફેમિલીને મોકલી શકે છે." 
+                    data-hi="ग्राहक अपने पासवर्ड के साथ लिंक फैमिली को भेज सकते हैं।">
+                    ગ્રાહક પોતાના પાસવર્ડ સાથે લિંક ફેમિલીને મોકલી શકે છે.
+                </p>
+                <div class="feature-example dual-lang" 
+                    data-gu="💡 ઉદાહરણ: એક જ પાસવર્ડથી આખું ફેમિલી અલગ-અલગ મોબાઈલ પર એકસાથે ગેલેરી જોઈ શકશે, વરરાજા ઓફિસેથી, કન્યા પાર્લરથી અને મમ્મી-પપ્પા ઘરેથી એક જ સમયે ફોટા સિલેક્ટ કરી શકશે." 
+                    data-hi="💡 उदाहरण: एक ही पासवर्ड से पूरी फैमिली अलग-अलग मोबाइल पर एक साथ गैलरी देख सकेगी, दूल्हा ऑफिस से, दुल्हन पार्लर से और मम्मी-पापा घर से एक ही समय पर फोटो सेलेक्ट कर सकेंगे।">
+                    💡 ઉદાહરણ: એક જ પાસવર્ડથી આખું ફેમિલી અલગ-અલગ મોબાઈલ પર એકસાથે ગેલેરી જોઈ શકશે, વરરાજા ઓફિસેથી, કન્યા પાર્લરથી અને મમ્મી-પપ્પા ઘરેથી એક જ સમયે ફોટા સિલેક્ટ કરી શકશે.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">☁️</div>
+                <h3 class="feature-title dual-lang" data-gu="ક્લાઉડ અપલોડ" data-hi="क्लाउड अपलोड">ક્લાઉડ અપલોડ</h3>
+                <p class="feature-desc dual-lang" 
+                    data-gu="PC બંધ હોય તો પણ 24x7 એક્સેસ." 
+                    data-hi="PC बंद होने पर भी 24x7 एक्सेस।">
+                    PC બંધ હોય તો પણ 24x7 એક્સેસ.
+                </p>
+                <div class="feature-example dual-lang" 
+                    data-gu="💡 ઉદાહરણ: રાત્રે સ્ટુડિયો બંધ કર્યા પછી જો ગ્રાહકને ફ્રી સમયમાં ફોટા સિલેક્ટ કરવા હોય, તો એક ક્લિકથી ડેટા ક્લાઉડ પર અપલોડ કરી દો. તમારું PC બંધ હશે તો પણ ગ્રાહક 24x7 ફોટા જોઈ શકશે." 
+                    data-hi="💡 उदाहरण: रात में स्टूडियो बंद करने के बाद यदि ग्राहक फ्री समय में फोटो सेलेक्ट करना चाहें, तो एक क्लिक से डेटा क्लाउड पर अपलोड कर दें। आपका PC बंद होगा तो भी ग्राहक 24x7 फोटो देख सकेंगे।">
+                    💡 ઉદાહરણ: રાત્રે સ્ટુડિયો બંધ કર્યા પછી જો ગ્રાહકને ફ્રી સમયમાં ફોટા સિલેક્ટ કરવા હોય, તો એક ક્લિકથી ડેટા ક્લાઉડ પર અપલોડ કરી દો. તમારું PC બંધ હશે તો પણ ગ્રાહક 24x7 ફોટા જોઈ શકશે.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <h2 class="section-title dual-lang" 
+            data-gu="આ સોફ્ટવેર કેવી રીતે કામ કરે છે? ⚙️" 
+            data-hi="यह सॉफ्टवेयर कैसे काम करता है? ⚙️">
+            આ સોફ્ટવેર કેવી રીતે કામ કરે છે? ⚙️
+        </h2>
+
+        <div class="steps-container">
+            <div class="step-box">
+                <div class="step-number">1</div>
+                <div class="step-icon">💻</div>
+                <div class="step-title dual-lang" data-gu="ઇન્સ્ટોલ કરો" data-hi="इंस्टॉल करें">ઇન્સ્ટોલ કરો</div>
+                <div class="step-desc dual-lang" 
+                    data-gu="તમારા કમ્પ્યુટરમાં તત્વ સોફ્ટવેર ડાઉનલોડ કરી ઇન્સ્ટોલ કરો." 
+                    data-hi="अपने कंप्यूटर में तत्व सॉफ्टवेयर डाउनलोड कर इंस्टॉल करें।">
+                    તમારા કમ્પ્યુટરમાં તત્વ સોફ્ટવેર ડાઉનલોડ કરી ઇન્સ્ટોલ કરો.
+                </div>
+            </div>
+
+            <div class="step-arrow">➔</div>
+
+            <div class="step-box">
+                <div class="step-number">2</div>
+                <div class="step-icon">📂</div>
+                <div class="step-title dual-lang" data-gu="ફોલ્ડર લિંક કરો" data-hi="फोल्डर लिंक करें">ફોલ્ડર લિંક કરો</div>
+                <div class="step-desc dual-lang" 
+                    data-gu="જે ફોટા સિલેક્ટ કરાવવા હોય તે ફોલ્ડર સોફ્ટવેરમાં એડ કરો." 
+                    data-hi="जो फोटो सेलेक्ट करवाने हों उस फोल्डर को सॉफ्टवेयर में ऐड करें।">
+                    જે ફોટા સિલેક્ટ કરાવવા હોય તે ફોલ્ડર સોફ્ટવેરમાં એડ કરો.
+                </div>
+            </div>
+
+            <div class="step-arrow">➔</div>
+
+            <div class="step-box">
+                <div class="step-number">3</div>
+                <div class="step-icon">🔗</div>
+                <div class="step-title dual-lang" data-gu="લિંક મોકલો" data-hi="लिंक भेजें">લિંક મોકલો</div>
+                <div class="step-desc dual-lang" 
+                    data-gu="જનરેટ થયેલી મેજિક લિંક અને પાસવર્ડ ગ્રાહકને વોટ્સએપ કરો." 
+                    data-hi="जनरेट हुई मैजिक लिंक और पासवर्ड ग्राहक को व्हाट्सएप करें।">
+                    જનરેટ થયેલી મેજિક લિંક અને પાસવર્ડ ગ્રાહકને વોટ્સએપ કરો.
+                </div>
+            </div>
+
+            <div class="step-arrow">➔</div>
+
+            <div class="step-box">
+                <div class="step-number">4</div>
+                <div class="step-icon">✨</div>
+                <div class="step-title dual-lang" data-gu="ફોટા ઓટો-સેવ" data-hi="फोटो ऑटो-सेव">ફોટા ઓટો-સેવ</div>
+                <div class="step-desc dual-lang" 
+                    data-gu="ગ્રાહક ગેલેરી જોઈને ફોટા સિલેક્ટ કરશે અને તે તમારા PC માં અલગ ફોલ્ડરમાં સેવ થઈ જશે!" 
+                    data-hi="ग्राहक गैलरी देखकर फोटो सेलेक्ट करेगा और वो आपके PC में अलग फोल्डर में सेव हो जाएंगे!">
+                    ગ્રાહક ગેલેરી જોઈને ફોટા સિલેક્ટ કરશે અને તે તમારા PC માં અલગ ફોલ્ડરમાં સેવ થઈ જશે!
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="file-share-section">
+        <h2 class="section-title dual-lang" 
+            data-gu="સ્માર્ટ ફાઇલ શેર: મોંઘી સર્વિસ કરતા કેમ સારું? 🚀" 
+            data-hi="स्मार्ट फाइल शेयर: महंगी सर्विस से बेहतर क्यों? 🚀">
+            સ્માર્ટ ફાઇલ શેર: મોંઘી સર્વિસ કરતા કેમ સારું? 🚀
+        </h2>
+
+        <div class="fs-container">
+            <div class="fs-benefits">
+                <div class="fs-benefit-item">
+                    <div class="fs-benefit-title dual-lang" data-gu="⚡ ઝીરો ડેટા લોસ (NTFS Hardlink)" data-hi="⚡ ज़ीरो डेटा लॉस (NTFS Hardlink)">⚡ ઝીરો ડેટા લોસ (NTFS Hardlink)</div>
+                    <p class="fs-benefit-desc dual-lang" 
+                        data-gu="ફાઇલ ગમે તેટલી મોટી હોય (૧૦૦ GB કે ૫૦૦ GB), તેને કોપી કરવામાં સમય નહિ બગડે. તે સીધી ફાઇલ શેર દ્વારા સામેના પીસીમાં પહોંચશે." 
+                        data-hi="फाइल कितनी भी बड़ी हो (100 GB या 500 GB), उसे कॉपी करने में समय नहीं बिगड़ेगा। वह सीधे फाइल शेयर द्वारा सामने वाले पीसी में पहुंचेगी।">
+                        ફાઇલ ગમે તેટલી મોટી હોય (૧૦૦ GB કે ૫૦૦ GB), તેને કોપી કરવામાં સમય નહિ બગડે. તે સીધી ફાઇલ શેર દ્વારા સામેના પીસીમાં પહોંચશે.
+                    </p>
+                </div>
+                <div class="fs-benefit-item">
+                    <div class="fs-benefit-title dual-lang" data-gu="☁️ કોઈ ક્લાઉડ લિમિટ નહિ" data-hi="☁️ कोई क्लाउड लिमिट नहीं">☁️ કોઈ ક્લાઉડ લિમિટ નહિ</div>
+                    <p class="fs-benefit-desc dual-lang" 
+                        data-gu="ગૂગલ ડ્રાઈવ જેવી ૨ જીબી કે ૧૫ જીબીની કોઈ મર્યાદા નથી. તમારા કમ્પ્યુટરની જેટલી સાઈઝ, એટલો ડેટા અનલિમિટેડ શેર કરો." 
+                        data-hi="गूगल ड्राइव जैसी 2 जीबी या 15 जीबी की कोई सीमा नहीं है। आपके कंप्यूटर की जितनी साइज, उतना डेटा अनलिमिटेड शेयर करें।">
+                        ગૂગલ ડ્રાઈવ જેવી ૨ જીબી કે ૧૫ જીબીની કોઈ મર્યાદા નથી. તમારા કમ્પ્યુટરની જેટલી સાઈઝ, એટલો ડેટા અનલિમિટેડ શેર કરો.
+                    </p>
+                </div>
+                <div class="fs-benefit-item">
+                    <div class="fs-benefit-title dual-lang" data-gu="🤝 પ્રોફેશનલ શેરિંગ" data-hi="🤝 प्रोफेशनल शेयरिंग">🤝 પ્રોફેશનલ શેરિંગ</div>
+                    <p class="fs-benefit-desc dual-lang" 
+                        data-gu="તમે તમારા એડિટરને કે બીજા સ્ટુડિયો મિત્રને તેના સિક્રેટ ID દ્વારા શોધીને ડાયરેક્ટ ફાઇલ મોકલી શકો છો." 
+                        data-hi="आप अपने एडिटर को या दूसरे स्टूडियो मित्र को उसके सीक्रेट ID द्वारा खोजकर डायरेक्ट फाइल भेज सकते हैं।">
+                        તમે તમારા એડિટરને કે બીજા સ્ટુડિયો મિત્રને તેના સિક્રેટ ID દ્વારા શોધીને ડાયરેક્ટ ફાઇલ મોકલી શકો છો.
+                    </p>
+                </div>
+                <div class="fs-benefit-item">
+                    <div class="fs-benefit-title dual-lang" data-gu="🔒 એન્ડ-ટુ-એન્ડ સિક્યોરિટી" data-hi="🔒 एंड-टू-एंड सिक्योरिटी">🔒 એન્ડ-ટુ-એન્ડ સિક્યોરિટી</div>
+                    <p class="fs-benefit-desc dual-lang" 
+                        data-gu="ડેટા તમારા અને સામેના પીસી વચ્ચે જ રહે છે, વચ્ચે કોઈ ત્રીજું વ્યક્તિ તેને જોઈ શકતું નથી." 
+                        data-hi="डेटा आपके और सामने वाले पीसी के बीच ही रहता है, बीच में कोई तीसरा व्यक्ति उसे देख नहीं सकता।">
+                        ડેટા તમારા અને સામેના પીસી વચ્ચે જ રહે છે, વચ્ચે કોઈ ત્રીજું વ્યક્તિ તેને જોઈ શકતું નથી.
+                    </p>
+                </div>
+                <div class="fs-benefit-item">
+                    <div class="fs-benefit-title dual-lang" data-gu="🌐 ઇન્ટરનેટનો શ્રેષ્ઠ ઉપયોગ" data-hi="🌐 इंटरनेट का सर्वश्रेष्ठ उपयोग">🌐 ઇન્ટરનેટનો શ્રેષ્ઠ ઉપયોગ</div>
+                    <p class="fs-benefit-desc dual-lang" 
+                        data-gu="જો સામેવાળો વ્યક્તિ ઓનલાઇન હોય, તો જ રોકેટની ગતિએ ટ્રાન્સફર થશે. તમારા ઇન્ટરનેટની પૂરી સ્પીડનો ઉપયોગ થશે." 
+                        data-hi="यदि सामने वाला व्यक्ति ऑनलाइन है, तभी रॉकेट की गति से ट्रांसफर होगा। आपके इंटरनेट की पूरी स्पीड का उपयोग होगा।">
+                        જો સામેવાળો વ્યક્તિ ઓનલાઇન હોય, તો જ રોકેટની ગતિએ ટ્રાન્સફર થશે. તમારા ઇન્ટરનેટની પૂરી સ્પીડનો ઉપયોગ થશે.
+                    </p>
+                </div>
+            </div>
+
+            <div class="fs-compare-box">
+                <div class="fs-compare-title dual-lang" 
+                    data-gu="અન્ય સર્વિસ સાથે સરખામણી ⚖️" 
+                    data-hi="अन्य सर्विस के साथ तुलना ⚖️">
+                    અન્ય સર્વિસ સાથે સરખામણી ⚖️
+                </div>
+                <div class="fs-compare-item">
+                    <span>WeTransfer:</span> <span>૨ જીબી પછી પૈસા માંગે છે!</span>
+                </div>
+                <div class="fs-compare-item">
+                    <span>Dropbox:</span> <span>લિમિટેડ સ્ટોરેજ અને સ્લો અપલોડ!</span>
+                </div>
+                <div class="fs-compare-item winner">
+                    <span class="dual-lang" data-gu="તત્વ ફાઇલ શેર 🏆" data-hi="तत्व फाइल शेयर 🏆">તત્વ ફાઇલ શેર 🏆</span>
+                    <span style="color:#ddd; font-weight:normal; font-size:14px;" class="dual-lang" 
+                        data-gu="ફિક્સ સામાન્ય સર્વિસ ચાર્જ પર Monthly કે Yearly પ્લાન, જેમાં કોઈ લિમિટ નહિ અને ડાયરેક્ટ પીસી-ટુ-પીસી ફુલ સ્પીડ." 
+                        data-hi="फिक्स सामान्य सर्विस चार्ज पर Monthly या Yearly प्लान, जिसमें कोई लिमिट नहीं और डायरेक्ट पीसी-टू-पीसी फुल स्पीड।">
+                        ફિક્સ સામાન્ય સર્વિસ ચાર્જ પર Monthly કે Yearly પ્લાન, જેમાં કોઈ લિમિટ નહિ અને ડાયરેક્ટ પીસી-ટુ-પીસી ફુલ સ્પીડ.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="refer-req-section">
+        <div class="rr-container">
+            
+            <div class="rr-card">
+                <div class="rr-icon">🤝</div>
+                <h3 class="rr-title dual-lang" 
+                    data-gu="Refer & Earn (મિત્રોને જોડો અને કમાઓ)" 
+                    data-hi="Refer & Earn (दोस्तों को जोड़ें और कमाएं)">
+                    Refer & Earn (મિત્રોને જોડો અને કમાઓ)
+                </h3>
+                <p class="rr-desc dual-lang" 
+                    data-gu="તત્વ સોફ્ટવેરમાં ઇનબિલ્ટ રેફરલ સિસ્ટમ છે. તમારા એક રેફરન્સથી કોઈ સ્ટુડિયો જોડાશે, તો બંનેને ફાયદો થશે!" 
+                    data-hi="तत्व सॉफ्टवेयर में इनबिल्ट रेफरल सिस्टम है। आपके एक रेफरेंस से कोई स्टूडियो जुड़ेगा, तो दोनों को फायदा होगा!">
+                    તત્વ સોફ્ટવેરમાં ઇનબિલ્ટ રેફરલ સિસ્ટમ છે. તમારા એક રેફરન્સથી કોઈ સ્ટુડિયો જોડાશે, તો બંનેને ફાયદો થશે!
+                </p>
+                <div class="refer-box">
+                    <div style="font-size: 30px;">🎁</div>
+                    <div class="refer-highlight dual-lang" 
+                        data-gu="તમારા સ્ટુડિયો મિત્રને આ સોફ્ટવેર અપાવો અને તમારા વોલેટમાં ફ્રી ક્રેડિટ (ફ્રી દિવસો) મેળવો!" 
+                        data-hi="अपने स्टूडियो मित्र को यह सॉफ्टवेयर दिलाएं और अपने वॉलेट में फ्री क्रेडिट (फ्री दिन) पाएं!">
+                        તમારા સ્ટુડિયો મિત્રને આ સોફ્ટવેર અપાવો અને તમારા વોલેટમાં ફ્રી ક્રેડિટ (ફ્રી દિવસો) મેળવો!
+                    </div>
+                </div>
+            </div>
+
+            <div class="rr-card">
+                <div class="rr-icon">🖥️</div>
+                <h3 class="rr-title dual-lang" 
+                    data-gu="સિસ્ટમ રિક્વાયરમેન્ટ્સ (System Requirements)" 
+                    data-hi="सिस्टम रिक्वायरमेंट्स (System Requirements)">
+                    સિસ્ટમ રિક્વાયરમેન્ટ્સ (System Requirements)
+                </h3>
+                <p class="rr-desc dual-lang" 
+                    data-gu="તમારું કમ્પ્યુટર જૂનું હોય તો પણ ચિંતા નહિ, આ સોફ્ટવેર ખૂબ જ લાઈટવેઈટ છે." 
+                    data-hi="आपका कंप्यूटर पुराना हो तो भी चिंता नहीं, यह सॉफ्टवेयर बहुत ही लाइटवेट है।">
+                    તમારું કમ્પ્યુટર જૂનું હોય તો પણ ચિંતા નહિ, આ સોફ્ટવેર ખૂબ જ લાઈટવેઈટ છે.
+                </p>
+                <ul class="req-list">
+                    <li>
+                        <strong>OS:</strong> 
+                        <span class="dual-lang" data-gu="Windows 10/11 (64-bit) સપોર્ટેડ." data-hi="Windows 10/11 (64-bit) सपोर्टेड।">Windows 10/11 (64-bit) સપોર્ટેડ.</span>
+                    </li>
+                    <li>
+                        <strong>Internet:</strong> 
+                        <span class="dual-lang" data-gu="સામાન્ય સ્પીડ પણ ચાલશે." data-hi="सामान्य स्पीड भी चलेगी।">સામાન્ય સ્પીડ પણ ચાલશે.</span>
+                    </li>
+                    <li>
+                        <strong>RAM:</strong> 
+                        <span class="dual-lang" data-gu="ઓછામાં ઓછી 4GB." data-hi="कम से कम 4GB.">ઓછામાં ઓછી 4GB.</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <div class="faq-container">
+            <h2 class="section-title dual-lang" style="text-align: center; display: block;"
+                data-gu="વારંવાર પૂછાતા સવાલો (FAQ) ❓" 
+                data-hi="अक्सर पूछे जाने वाले प्रश्न (FAQ) ❓">
+                વારંવાર પૂછાતા સવાલો (FAQ) ❓
+            </h2>
+
+            <details class="faq-item">
+                <summary class="dual-lang" data-gu="શું મારા ફોટા સેફ રહેશે?" data-hi="क्या मेरे फोटो सेफ रहेंगे?">શું મારા ફોટા સેફ રહેશે?</summary>
+                <div class="faq-content dual-lang" 
+                    data-gu="હા, ૧૦૦% એન્ક્રિપ્ટેડ. તમારો ડેટા કોઈ સર્વર પર સેવ થતો નથી, તે સીધો તમારા અને ગ્રાહકના પીસી વચ્ચે જ રહે છે." 
+                    data-hi="हां, 100% एन्क्रिप्टेड। आपका डेटा किसी सर्वर पर सेव नहीं होता, यह सीधा आपके और ग्राहक के पीसी के बीच ही रहता है।">
+                    હા, ૧૦૦% એન્ક્રિપ્ટેડ. તમારો ડેટા કોઈ સર્વર પર સેવ થતો નથી, તે સીધો તમારા અને ગ્રાહકના પીસી વચ્ચે જ રહે છે.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="dual-lang" data-gu="ઇન્ટરનેટ સ્પીડ કેટલી જોઈએ?" data-hi="इंटरनेट स्पीड कितनी चाहिए?">ઇન્ટરનેટ સ્પીડ કેટલી જોઈએ?</summary>
+                <div class="faq-content dual-lang" 
+                    data-gu="સામાન્ય બ્રોડબેન્ડ કે મોબાઈલ સ્પીડ (4G/5G) પર પણ સોફ્ટવેર એકદમ સરળતાથી કામ કરશે." 
+                    data-hi="सामान्य ब्रॉडबैंड या मोबाइल स्पीड (4G/5G) पर भी सॉफ्टवेयर बिल्कुल आसानी से काम करेगा।">
+                    સામાન્ય બ્રોડબેન્ડ કે મોબાઈલ સ્પીડ (4G/5G) પર પણ સોફ્ટવેર એકદમ સરળતાથી કામ કરશે.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="dual-lang" data-gu="પેમેન્ટ કેવી રીતે કરવાનું?" data-hi="पेमेंट कैसे करना है?">પેમેન્ટ કેવી રીતે કરવાનું?</summary>
+                <div class="faq-content dual-lang" 
+                    data-gu="અમારું સબ્સ્ક્રિપ્શન મોડલ છે. તમે ઓનલાઈન વોલેટ રિચાર્જ કરીને UPI કે કાર્ડ દ્વારા સીધું જ પેમેન્ટ કરી શકો છો." 
+                    data-hi="हमारा सब्सक्रिप्शन मॉडल है। आप ऑनलाइन वॉलेट रिचार्ज करके UPI या कार्ड द्वारा सीधे पेमेंट कर सकते हैं।">
+                    અમારું સબ્સ્ક્રિપ્શન મોડલ છે. તમે ઓનલાઈન વોલેટ રિચાર્જ કરીને UPI કે કાર્ડ દ્વારા સીધું જ પેમેન્ટ કરી શકો છો.
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="about-container">
+            <div class="about-header">
+                <h2 class="dual-lang" data-gu="અમારા વિશે 👤" data-hi="हमारे बारे में 👤">અમારા વિશે 👤</h2>
+                <p class="dual-lang" 
+                    data-gu="ટેકનોલોજી અને અનુભવનો એક સુંદર સમન્વય" 
+                    data-hi="टेक्नोलॉजी और अनुभव का एक सुंदर संगम">
+                    ટેકનોલોજી અને અનુભવનો એક સુંદર સમન્વય
+                </p>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3 class="dual-lang" data-gu="૧. અમારો પરિચય (Who We Are)" data-hi="१. हमारा परिचय (Who We Are)">૧. અમારો પરિચય (Who We Are)</h3>
+                    <p class="dual-lang" 
+                        data-gu="નમસ્તે મિત્રો! અમે કોઈ અજાણી આઈટી કંપની નથી, પણ તમારા જેવા જ ફોટોગ્રાફીના વ્યવસાય સાથે વર્ષોથી જોડાયેલા અને તેના દરેક પાસાને નજીકથી સમજનારા 'શ્રી માં સ્ટુડિયો' (વડગામ) ના સંચાલકો છીએ. વર્ષોના અનુભવ અને નવી ટેકનોલોજી પ્રત્યેના પ્રેમે અમને આ ક્ષેત્રમાં કંઈક નવું કરવા પ્રેરણા આપી છે." 
+                        data-hi="नमस्ते दोस्तों! हम कोई अनजान आईटी कंपनी नहीं हैं, बल्कि आप ही की तरह फोटोग्राफी व्यवसाय से सालों से जुड़े और इसके हर पहलू को करीब से समझने वाले 'श्री मां स्टूडियो' (वडगाम) के संचालक हैं।">
+                        નમસ્તે મિત્રો! અમે કોઈ અજાણી આઈટી કંપની નથી, પણ તમારા જેવા જ ફોટોગ્રાફીના વ્યવસાય સાથે વર્ષોથી જોડાયેલા અને તેના દરેક પાસાને નજીકથી સમજનારા 'શ્રી માં સ્ટુડિયો' (વડગામ) ના સંચાલકો છીએ. વર્ષોના અનુભવ અને નવી ટેકનોલોજી પ્રત્યેના પ્રેમે અમને આ ક્ષેત્રમાં કંઈક નવું કરવા પ્રેરણા આપી છે.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3 class="dual-lang" data-gu="૨. 'તત્વ વર્લ્ડ' પાછળનો વિચાર (Our Vision)" data-hi="२. 'तत्व वर्ल्ड' के पीछे का विचार (Our Vision)">૨. 'તત્વ વર્લ્ડ' પાછળનો વિચાર (Our Vision)</h3>
+                    <p class="dual-lang" 
+                        data-gu="એક ફોટોગ્રાફર તરીકે અમે સમજીએ છીએ કે ફોટા પાડવા એ એક કળા છે, પણ ત્યારબાદનું મેનેજમેન્ટ અને સિલેક્શન એ ખૂબ જ મહેનત માંગી લેતું કામ છે. સ્ટુડિયો મિત્રોના 'અમૂલ્ય સમયની બચત' થાય અને ગ્રાહકોને એક 'વર્લ્ડ-ક્લાસ ડિજિટલ અનુભવ' મળે તેવા ઉદ્દેશ્ય સાથે અમે આ સોફ્ટવેરનું નિર્માણ કર્યું છે. આમાં બીજા અનેક ફીચર્સ સમયે સમયે ઉમેરતા જઈશું જેથી તમને ઓછા ઈન્વેસ્ટમેન્ટમાં બેસ્ટ સર્વિસ મળી રહે." 
+                        data-hi="एक फोटोग्राफर के रूप में हम समझते हैं कि फोटो खींचना एक कला है, लेकिन उसके बाद का मैनेजमेंट बहुत मेहनत का काम है। समय की बचत और ग्राहकों को बेहतरीन अनुभव देने के उद्देश्य से हमने यह सॉफ्टवेयर बनाया है।">
+                        એક ફોટોગ્રાફર તરીકે અમે સમજીએ છીએ કે ફોટા પાડવા એ એક કળા છે, પણ ત્યારબાદનું મેનેજમેન્ટ અને સિલેક્શન એ ખૂબ જ મહેનત માંગી લેતું કામ છે. સ્ટુડિયો મિત્રોના 'અમૂલ્ય સમયની બચત' થાય અને ગ્રાહકોને એક 'વર્લ્ડ-ક્લાસ ડિજિટલ અનુભવ' મળે તેવા ઉદ્દેશ્ય સાથે અમે આ સોફ્ટવેરનું નિર્માણ કર્યું છે. આમાં બીજા અનેક ફીચર્સ સમયે સમયે ઉમેરતા જઈશું જેથી તમને ઓછા ઈન્વેસ્ટમેન્ટમાં બેસ્ટ સર્વિસ મળી રહે.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3 class="dual-lang" data-gu="૩. નેતૃત્વ (The Faces Behind SPS Pro)" data-hi="३. नेतृत्व (The Faces Behind SPS Pro)">૩. નેતૃત્વ (The Faces Behind SPS Pro)</h3>
+                    <p class="dual-lang" 
+                        data-gu="અમે બંને ભાઈઓ તમારા સાથ અને સહકાર માટે હંમેશા તત્પર છીએ:<br><br>• <strong>ચેતન સી. જોષી (Chetan Bhudev):</strong> સોફ્ટવેર ડેવલપમેન્ટ અને ટેકનિકલ આર્કિટેક્ટ.<br>• <strong>કેતન સી. જોષી:</strong> મેનેજમેન્ટ અને કસ્ટમર સપોર્ટ હેડ." 
+                        data-hi="हम दोनों भाई आपके सहयोग के लिए हमेशा तत्पर हैं:<br><br>• <strong>चेतन सी. जोशी:</strong> सॉफ्टवेयर डेवलपमेंट और टेक्निकल आर्किटेक्ट।<br>• <strong>केतन सी. जोशी:</strong> मैनेजमेंट और कस्टमर सपोर्ट हेड।">
+                        અમે બંને ભાઈઓ તમારા સાથ અને સહકાર માટે હંમેશા તત્પર છીએ:<br><br>• <strong>ચેતન સી. જોષી (Chetan Bhudev):</strong> સોફ્ટવેર ડેવલપમેન્ટ અને ટેકનિકલ આર્કિટેક્ટ.<br>• <strong>કેતન સી. જોષી:</strong> મેનેજમેન્ટ અને કસ્ટમર સપોર્ટ હેડ.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3 class="dual-lang" data-gu="૪. અમારો સંકલ્પ (Our Commitment)" data-hi="४. हमारा संकल्प (Our Commitment)">૪. અમારો સંકલ્પ (Our Commitment)</h3>
+                    <p class="dual-lang" 
+                        data-gu="'તત્વ' (Tatva) માત્ર એક સોફ્ટવેર નથી, પણ એક 'વિશ્વાસ' છે. અમે ઇચ્છીએ છીએ કે ગુજરાતનો દરેક નાનો-મોટો સ્ટુડિયો ડિજિટલ યુગમાં ગર્વ સાથે આગળ વધે. અમે તમને શ્રેષ્ઠ સુવિધા આપવા પ્રતિબદ્ધ છીએ." 
+                        data-hi="'तत्व' (Tatva) केवल एक सॉफ्टवेयर नहीं, बल्कि एक 'विश्वास' है। हम चाहते हैं कि हर छोटा-बड़ा स्टूडियो डिजिटल युग में गर्व के साथ आगे बढ़े।">
+                        'તત્વ' (Tatva) માત્ર એક સોફ્ટવેર નથી, પણ એક 'વિશ્વાસ' છે. અમે ઇચ્છીએ છીએ કે ગુજરાતનો દરેક નાનો-મોટો સ્ટુડિયો ડિજિટલ યુગમાં ગર્વ સાથે આગળ વધે. અમે તમને શ્રેષ્ઠ સુવિધા આપવા પ્રતિબદ્ધ છીએ.
+                    </p>
+                </div>
+            </div>
+
+            <div class="contact-card">
+                <h3 style="margin-top:0; color:#fff;" class="dual-lang" data-gu="૫. અમારું સરનામું અને સંપર્ક (Stay Connected)" data-hi="५. हमारा पता और संपर्क (Stay Connected)">૫. અમારું સરનામું અને સંપર્ક (Stay Connected)</h3>
+                <p class="dual-lang" data-gu="પારદર્શિતા અને વિશ્વાસ જ અમારો પાયો છે. તમે ગમે ત્યારે અમારો સંપર્ક કરી શકો છો:" data-hi="पारदर्शिता और विश्वास ही हमारी नींव है। आप कभी भी हमसे संपर्क कर सकते हैं:">પારદર્શિતા અને વિશ્વાસ જ અમારો પાયો છે. તમે ગમે ત્યારે અમારો સંપર્ક કરી શકો છો:</p>
+                <p>📍 <strong>શ્રી માં સ્ટુડિયો</strong>, વડગામ (બનાસકાંઠા).</p>
+                <p>📞 <strong>મોબાઈલ:</strong> 98981 22349 / 97233 61684</p>
+                <p>🌐 <strong>વેબસાઇટ:</strong> shreemaastudio.in</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="security-section">
+        <div class="security-box">
+            <div class="shield-icon">🔒</div>
+            <h2 class="security-title dual-lang" 
+                data-gu="પ્રાઇવસીનું પાક્કું કવચ (No Server Storage)" 
+                data-hi="प्राइवेसी का पक्का कवच (No Server Storage)">
+                પ્રાઇવસીનું પાક્કું કવચ (No Server Storage)
+            </h2>
+            <p class="security-desc" style="color: var(--primary-orange); font-weight: bold; margin-bottom: 15px;">
+                <span class="dual-lang" 
+                    data-gu="ઘણા સ્ટુડિયો વાળાને એવો ડર હોય છે કે અમારી શેર કરેલી ફાઇલો કે ફોટા કોઈ સર્વર પર સેવ તો નહિ થઈ જાય ને?" 
+                    data-hi="कई स्टूडियो वालों को यह डर होता है कि हमारी शेयर की गई फाइलें या फोटो किसी सर्वर पर सेव तो नहीं हो जाएंगे ना?">
+                    ઘણા સ્ટુડિયો વાળાને એવો ડર હોય છે કે અમારી શેર કરેલી ફાઇલો કે ફોટા કોઈ સર્વર પર સેવ તો નહિ થઈ જાય ને?
+                </span>
+            </p>
+            <p class="security-desc dual-lang" 
+                data-gu="તમારો ડેટા કે તમારા ક્લાઈન્ટ ના ફોટા કોઈ જ સર્વર પર સેવ થતા નથી. શેર કરેલ ફાઈલો સીધી તમારા પીસીમાંથી નીકળીને સામેવાળા સ્ટુડિયો ના પીસીમાં જ જાય છે. અને તમારા ક્લાઈન્ટ ના ફોટા સીધા તમારા ક્લાઈન્ટ જોડે જ જાય છે. ૧૦૦% પ્રાઇવસી અને સુરક્ષાની ગેરંટી." 
+                data-hi="आपका डेटा या आपके क्लाइंट के फोटो किसी भी सर्वर पर सेव नहीं होते हैं। शेयर की गई फाइलें सीधे आपके पीसी से निकलकर सामने वाले स्टूडियो के पीसी में ही जाती हैं। और आपके क्लाइंट के फोटो सीधे आपके क्लाइंट के पास ही जाते हैं। 100% प्राइवेसी और सुरक्षा की गारंटी।">
+                તમારો ડેટા કે તમારા ક્લાઈન્ટ ના ફોટા કોઈ જ સર્વર પર સેવ થતા નથી. શેર કરેલ ફાઈલો સીધી તમારા પીસીમાંથી નીકળીને સામેવાળા સ્ટુડિયો ના પીસીમાં જ જાય છે. અને તમારા ક્લાઈન્ટ ના ફોટા સીધા તમારા ક્લાઈન્ટ જોડે જ જાય છે. ૧૦૦% પ્રાઇવસી અને સુરક્ષાની ગેરંટી.
+            </p>
+        </div>
+    </section>
+
+    <section class="feedback-section">
+        <div class="feedback-box">
+            <div style="font-size: 50px; margin-bottom: 20px;">💡</div>
+            <h2 class="feedback-title dual-lang" 
+                data-gu="તમારી પાસે કોઈ નવો આઈડિયા છે? ✨" 
+                data-hi="क्या आपके पास कोई नया विचार है? ✨">
+                તમારી પાસે કોઈ નવો આઈડિયા છે? ✨
+            </h2>
+            <p class="feedback-desc dual-lang" 
+                data-gu="તત્વ સોફ્ટવેરને હજુ વધુ સારું બનાવવા માટે તમારા આઈડિયા અમારા માટે અમૂલ્ય છે. અમને જણાવો કે તમે કયું નવું ફીચર જોવા માંગો છો!" 
+                data-hi="तत्व सॉफ्टवेयर को और बेहतर बनाने के लिए आपके विचार हमारे लिए अमूल्य हैं। हमें बताएं कि आप कौन सा नया फीचर देखना चाहते हैं!">
+                તત્વ સોફ્ટવેરને હજુ વધુ સારું બનાવવા માટે તમારા આઈડિયા અમારા માટે અમૂલ્ય છે. અમને જણાવો કે તમે કયું નવું ફીચર જોવા માંગો છો!
+            </p>
+            <a href="https://wa.me/919898122349?text=નમસ્તે તત્વ ટીમ! મારી પાસે સોફ્ટવેર માટે એક નવો આઈડિયા છે..." target="_blank" class="cta-wa-btn" style="margin: 0 auto; width: fit-content;">
+                <span style="font-size:24px; margin-right:10px;">🚀</span>
+                <span class="dual-lang" data-gu="આઈડિયા શેર કરો (WhatsApp)" data-hi="आइडिया शेयर करें (WhatsApp)">આઈડિયા શેર કરો (WhatsApp)</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="cta-bottom-section">
+        <div class="cta-bottom-container">
+            <h2 class="cta-bottom-title dual-lang" 
+                data-gu="શું તમે તમારા સ્ટુડિયોને ડિજિટલ અને સ્માર્ટ બનાવવા તૈયાર છો?" 
+                data-hi="क्या आप अपने स्टूडियो को डिजिटल और स्मार्ट बनाने के लिए तैयार हैं?">
+                શું તમે તમારા સ્ટુડિયોને ડિજિટલ અને સ્માર્ટ બનાવવા તૈયાર છો?
+            </h2>
+            <p class="cta-bottom-desc dual-lang" 
+                data-gu="આજે જ ઇન્સ્ટોલેશન અને લાઈવ ડેમો બુકિંગ માટે કોલ કરો અથવા WhatsApp પર મેસેજ કરો!" 
+                data-hi="आज ही इंस्टॉलेशन और लाइव डेमो बुकिंग के लिए कॉल करें या WhatsApp पर मैसेज करें!">
+                આજે જ ઇન્સ્ટોલેશન અને લાઈવ ડેમો બુકિંગ માટે કોલ કરો અથવા WhatsApp પર મેસેજ કરો!
+            </p>
+            <div class="cta-bottom-buttons">
+                <a href="tel:+919898122349" class="cta-call-btn">
+                    📞 <span class="dual-lang" data-gu="કોલ કરો: 98981 22349" data-hi="कॉल करें: 98981 22349">કોલ કરો: 98981 22349</span>
+                </a>
+                <a href="https://wa.me/919898122349?text=નમસ્તે શ્રી માં સ્ટુડિયો! મારે 'Tatva' સોફ્ટવેરનું લાઇવ ડેમો અને ઇન્સ્ટોલેશન બુક કરવું છે." target="_blank" class="cta-wa-btn">
+                    <span style="font-size:24px; margin-right:5px;">💬</span> <span class="dual-lang" data-gu="WhatsApp પર બુક કરો" data-hi="WhatsApp पर बुक करें">WhatsApp પર બુક કરો</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <a href="https://wa.me/919898122349?text=નમસ્તે શ્રી માં સ્ટુડિયો! મારે 'Tatva' સોફ્ટવેરનું લાઇવ ડેમો અને ઇન્સ્ટોલેશન બુક કરવું છે." target="_blank" class="wa-floating-btn" title="Chat on WhatsApp">
+        <span style="display: flex; align-items: center; justify-content: center; transform: translateY(-2px);">
+            <svg width="35" height="35" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.01 2.002c-5.516 0-9.998 4.48-9.998 9.997 0 1.968.513 3.864 1.488 5.539L2 22l4.63-1.185a9.968 9.968 0 005.38 1.564h.004c5.513 0 9.995-4.48 9.995-9.997 0-5.516-4.482-9.996-9.999-9.996zm0 16.666h-.003a8.28 8.28 0 01-4.223-1.16l-.303-.18-3.138.802.836-3.06-.197-.314a8.293 8.293 0 01-1.267-4.428c0-4.582 3.732-8.312 8.315-8.312 4.583 0 8.316 3.73 8.316 8.311 0 4.584-3.733 8.315-8.317 8.315zm4.568-6.223c-.25-.125-1.483-.733-1.714-.816-.23-.084-.398-.125-.565.125-.167.25-.648.816-.795.983-.146.167-.294.188-.544.063-.25-.125-1.058-.39-2.017-1.196-.745-.626-1.248-1.4-1.395-1.65-.147-.25-.015-.386.11-.511.112-.112.25-.292.375-.438.125-.147.167-.25.25-.417.083-.167.042-.313-.021-.438-.063-.125-.565-1.363-.774-1.867-.203-.491-.41-.424-.565-.433-.147-.008-.314-.01-.482-.01-.167 0-.44.063-.67.313-.23.25-.88.86-.88 2.096s.9 2.427 1.026 2.594c.125.167 1.767 2.698 4.28 3.784.598.258 1.065.412 1.43.528.601.19 1.147.163 1.58.1.483-.07 1.483-.606 1.693-1.193.21-.586.21-1.087.147-1.192-.063-.105-.23-.167-.482-.292z"/>
+            </svg>
+        </span>
+    </a>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">TATVA</div>
+            <div class="footer-text dual-lang" 
+                data-gu="© 2026 Tatva World. સર્વાધિકાર સુરક્ષિત. | Developed by Shree Maa Studio Vadgam" 
+                data-hi="© 2026 Tatva World. सर्वाधिकार सुरक्षित। | Developed by Shree Maa Studio Vadgam">
+                © 2026 Tatva World. સર્વાધિકાર સુરક્ષિત. | Developed by Shree Maa Studio Vadgam
+            </div>
+            <div class="footer-contact dual-lang" 
+                data-gu="કોલ કરો: 9898122349 | 9723361684" 
+                data-hi="कॉल करें: 9898122349 | 9723361684">
+                કોલ કરો: 9898122349 | 9723361684
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function changeLanguage(lang) {
+            // બટનનો કલર બદલવા માટે
+            document.getElementById('btn-gu').classList.remove('active');
+            document.getElementById('btn-hi').classList.remove('active');
+            document.getElementById('btn-' + lang).classList.add('active');
+
+            // બધા જ dual-lang ક્લાસ વાળા એલિમેન્ટ્સ શોધો
+            const elements = document.querySelectorAll('.dual-lang');
+            
+            elements.forEach(el => {
+                // જે ભાષા સિલેક્ટ થઈ હોય તે એટ્રીબ્યુટમાંથી ટેક્સ્ટ લઈને એલિમેન્ટમાં મૂકો
+                if(lang === 'gu') {
+                    el.innerHTML = el.getAttribute('data-gu');
+                    document.body.style.fontFamily = "'Noto Sans Gujarati', sans-serif";
+                } else if(lang === 'hi') {
+                    el.innerHTML = el.getAttribute('data-hi');
+                    document.body.style.fontFamily = "'Mukta', sans-serif";
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
