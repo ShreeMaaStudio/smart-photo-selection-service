@@ -108,8 +108,14 @@
                 penalizeUser();
             }
         });
-        window.addEventListener('blur', () => { penalizeUser(); });
-        document.addEventListener('visibilitychange', () => { if (document.hidden) penalizeUser(); });
+        window.addEventListener('blur', () => { 
+            // 🛡️ IFRAME FOCUS BUG FIX: કીબોર્ડ ખુલે કે iframe માં ટચ થાય તો બ્લોક ના કરો
+            if (document.activeElement && document.activeElement.id === 'main-frame') {
+                return; 
+            }
+            penalizeUser(); 
+        });
+        document.addEventListener('visibilitychange', () => { if (document.hidden) penalizeUser(); });
         window.addEventListener('touchstart', (e) => { if (e.touches.length >= 3) penalizeUser(); });
         document.addEventListener('copy', (e) => { e.preventDefault(); penalizeUser(); });
         document.addEventListener('cut', (e) => { e.preventDefault(); penalizeUser(); });
