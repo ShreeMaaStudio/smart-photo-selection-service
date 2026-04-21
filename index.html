@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TATVA - Smart Photo Selection & File Share</title>
+    <!-- SEO and Open Graph Meta Tags added for Google Search & WhatsApp Preview -->
+    <meta name="description" content="TATVA World - સ્ટુડિયો મિત્રો માટે 100% સુરક્ષિત, ફાસ્ટ અને પ્રાઇવસી સાથેનું અલ્ટીમેટ સ્માર્ટ ફોટો સિલેક્શન અને ડેટા શેરિંગ સોફ્ટવેર. નો પેનડ્રાઈવ, નો ડેટા ચોરી!">
+    <meta name="keywords" content="TATVA, Photo Selection, Studio Software, File Share, Data Privacy, Shree Maa Studio, Vadgam">
+    <meta property="og:title" content="TATVA - Smart Photo Selection & File Share">
+    <meta property="og:description" content="સ્ટુડિયો મિત્રો માટે 100% સુરક્ષિત, ફાસ્ટ અને પ્રાઇવસી સાથેનું અલ્ટીમેટ સોફ્ટવેર. નો પેનડ્રાઈવ, નો ડેટા ચોરી!">
+    <meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;700;900&family=Mukta:wght@400;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -101,13 +107,13 @@
 
         /* ================= હીરો સેક્શન (Hero Section) ================= */
         .hero {
-            height: 85vh;
+            min-height: 85vh; /* મોબાઈલના ડેસ્કટોપ મોડમાં કન્ટેન્ટ ગાયબ ના થાય તે માટે height ની જગ્યાએ min-height */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 0 20px;
+            padding: 80px 20px; /* ઉપર-નીચે સેફ સ્પેસ આપવા માટે */
             position: relative;
         }
 
@@ -133,6 +139,7 @@
             max-width: 900px;
             background: -webkit-linear-gradient(45deg, #ffffff, #FF8C00);
             -webkit-background-clip: text;
+            background-clip: text; /* VS Code ની વોર્નિંગ માટે ઉમેર્યું */
             -webkit-text-fill-color: transparent;
             animation: textGlow 2s ease-in-out infinite alternate;
         }
@@ -315,6 +322,9 @@
             -webkit-mask: 
                 linear-gradient(#fff 0 0) content-box, 
                 linear-gradient(#fff 0 0);
+            mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             z-index: 5;
@@ -449,6 +459,7 @@
             -webkit-text-stroke: 1px var(--primary-orange);
             background: linear-gradient(45deg, var(--primary-orange), #ffeb3b);
             -webkit-background-clip: text;
+            background-clip: text;
             letter-spacing: 4px;
             animation: logoGlow 3s infinite alternate;
         }
